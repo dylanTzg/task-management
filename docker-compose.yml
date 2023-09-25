@@ -5,14 +5,14 @@ volumes:
 
 services:
   db:
-    image: postgres:latest
+    image: postgres:15.4
     restart: always
     environment:
       POSTGRES_PASSWORD: project
       POSTGRES_USER: postgres
       POSTGRES_DB: project
     ports:
-      - 5432:5432
+      - 5431:5432
     volumes:
       - pgdata:/var/lib/postgresql/data
 

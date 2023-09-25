@@ -9,15 +9,15 @@ import { DataSource } from 'typeorm';
   imports: [TasksModule, UserModule, TypeOrmModule.forRoot({
     type: 'postgres',
     host: 'localhost',
-    port: 5432,
+    port: 5431,
     username: 'postgres',
-    password: 'projet',
-    database: 'projet',
+    password: 'project',
+    database: 'project',
     entities: [__dirname + '/**/*.entity{.ts,.js}'],
-    synchronize: true, 
+    synchronize: true,
   })],
   providers: [],
 })
 export class AppModule {
-  constructor(private dataSource: DataSource) {}
+  constructor(private dataSource: DataSource) { }
 } 
