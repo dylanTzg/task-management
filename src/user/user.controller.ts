@@ -5,7 +5,7 @@ import { CreateUserDto } from './create-user.dto';
 
 @Controller('users') // Le chemin du endpoint pour ce contrôleur
 export class UserController {
-  constructor(private readonly userService: UserService) {}
+  constructor(private readonly userService: UserService) { }
 
   @Post()
   async createUser(@Body() createUserDto: CreateUserDto) {
@@ -17,6 +17,22 @@ export class UserController {
       };
     } catch (error) {
       throw new HttpException('User creation failed', HttpStatus.BAD_REQUEST);
+    }
+  }
+
+  @Post('login')
+  async login(@Body() createUserDto: CreateUserDto) {
+    try {
+      const user = await this.userService.login(createUserDto);
+      if (!user) {
+        throw new HttpException('User doesn\'t exists', HttpStatus.BAD_REQUEST);
+      }
+      return {
+        message: 'User logged in successfully',
+        user,
+      };
+    } catch (error) {
+      throw new HttpException('User doesn\'t exists', HttpStatus.BAD_REQUEST);
     }
   }
 
