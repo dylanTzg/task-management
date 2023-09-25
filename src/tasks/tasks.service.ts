@@ -11,14 +11,14 @@ export class TasksService {
   constructor(
     @InjectRepository(TaskEntity)
     private readonly taskRepository: Repository<TaskEntity>,
-    private readonly userService: UserService  ) {}
+    private readonly userService: UserService) { }
 
-   async getAllTasks(userId: string): Promise<TaskEntity[]> {
-    return this.taskRepository.find({ where: { user: { id: userId } } });
+  async getAllTasks(): Promise<TaskEntity[]> {
+    return this.taskRepository.find();
   }
 
   async getTaskById(id: string): Promise<Task> {
-    const task = await this.taskRepository.findOne({where: {id}});
+    const task = await this.taskRepository.findOne({ where: { id } });
 
     if (!task) {
       throw new NotFoundException(`Task with ID ${id} not found`);
@@ -27,18 +27,17 @@ export class TasksService {
     return task;
   }
 
-  async createTask(userId: string, task: CreateTaskDto): Promise<Task> {
-    const taskUser = await this.userService.getById(userId);
-    if (!taskUser) {
-      throw new Error('Utilisateur non trouvé');
-    }
-  
+  async createTask(task: CreateTaskDto): Promise<Task> {
+    console.log(task);
     return this.taskRepository.save({
       ...task,
-      user: taskUser, 
     });
   }
-  
+
+  // async getTasksByUserId(userId: string): Promise<Task[]> {
+  //   return this.taskRepository.find({ where: { user: { id: userId } } });
+  // }
+
 
   async updateTaskStatus(id: string, status: TaskStatus): Promise<Task> {
     const task = await this.getTaskById(id);

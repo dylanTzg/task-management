@@ -12,7 +12,4 @@ export class UserEntity {
 
   @Column()
   lastName: string;
-
-  @OneToMany(() => TaskEntity, task => task.user) // One user can have many tasks
-  tasks: TaskEntity[];
 }

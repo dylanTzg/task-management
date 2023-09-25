@@ -1,14 +1,15 @@
 import { Controller, Get, Post, Body, Param, Delete, Patch } from '@nestjs/common';
 import { TasksService } from './tasks.service';
-import { Task,TaskStatus } from './task.model';
+import { Task, TaskStatus } from './task.model';
+import { CreateTaskDto } from './dto/create-task.dto';
 
 @Controller('tasks')
 export class TasksController {
-  constructor(private readonly tasksService: TasksService) {}
+  constructor(private readonly tasksService: TasksService) { }
 
-  @Get(':userId')
-  getAllTasks(@Param('userId') userId): Promise<Task[]> {
-    return this.tasksService.getAllTasks(userId);
+  @Get('')
+  getAllTasks(): Promise<Task[]> {
+    return this.tasksService.getAllTasks();
   }
 
   @Get(':id')
@@ -16,10 +17,15 @@ export class TasksController {
     return this.tasksService.getTaskById(id);
   }
 
-  @Post(':userId')
-  createTask(@Body() task: Task, @Param('userId') userId): Promise<Task> {
-    return this.tasksService.createTask(userId,task);
+  @Post()
+  createTask(@Body() task: CreateTaskDto): Promise<Task> {
+    return this.tasksService.createTask(task);
   }
+
+  // @Get(':userId')
+  // getTasksByUserId(@Param('userId') userId): Promise<Task[]> {
+  //   return this.tasksService.getTasksByUserId(userId);
+  // }
 
   @Patch(':id/status')
   updateTaskStatus(
