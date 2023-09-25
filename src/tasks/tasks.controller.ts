@@ -6,9 +6,9 @@ import { Task,TaskStatus } from './task.model';
 export class TasksController {
   constructor(private readonly tasksService: TasksService) {}
 
-  @Get()
-  getAllTasks(): Promise<Task[]> {
-    return this.tasksService.getAllTasks();
+  @Get(':userId')
+  getAllTasks(@Param('userId') userId): Promise<Task[]> {
+    return this.tasksService.getAllTasks(userId);
   }
 
   @Get(':id')
@@ -16,9 +16,9 @@ export class TasksController {
     return this.tasksService.getTaskById(id);
   }
 
-  @Post()
-  createTask(@Body() task: Task): Promise<Task> {
-    return this.tasksService.createTask(task);
+  @Post(':userId')
+  createTask(@Body() task: Task, @Param('userId') userId): Promise<Task> {
+    return this.tasksService.createTask(userId,task);
   }
 
   @Patch(':id/status')

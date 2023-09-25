@@ -3,16 +3,18 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { TaskEntity } from './task.entity';
 import { Task, TaskStatus } from './task.model';
+import { CreateTaskDto } from 'src/tasks/dto/create-task.dto';
+import { UserService } from 'src/user/user.service';
 
 @Injectable()
 export class TasksService {
   constructor(
     @InjectRepository(TaskEntity)
     private readonly taskRepository: Repository<TaskEntity>,
-  ) {}
+    private readonly userService: UserService  ) {}
 
-  async getAllTasks(): Promise<Task[]> {
-    return await this.taskRepository.find();
+   async getAllTasks(userId: string): Promise<TaskEntity[]> {
+    return this.taskRepository.find({ where: { user: { id: userId } } });
   }
 
   async getTaskById(id: string): Promise<Task> {
@@ -25,10 +27,18 @@ export class TasksService {
     return task;
   }
 
-  async createTask(task: Task): Promise<Task> {
-    const newTask = this.taskRepository.create(task);
-    return await this.taskRepository.save(newTask);
+  async createTask(userId: string, task: CreateTaskDto): Promise<Task> {
+    const taskUser = await this.userService.getById(userId);
+    if (!taskUser) {
+      throw new Error('Utilisateur non trouvé');
+    }
+  
+    return this.taskRepository.save({
+      ...task,
+      user: taskUser, 
+    });
   }
+  
 
   async updateTaskStatus(id: string, status: TaskStatus): Promise<Task> {
     const task = await this.getTaskById(id);

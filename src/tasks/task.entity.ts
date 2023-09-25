@@ -21,6 +21,6 @@ export class TaskEntity {
   })
   status: TaskStatus;
 
-  @ManyToOne(() => UserEntity, user => user.tasks) // Many tasks can belong to one user
+  @ManyToOne(() => UserEntity, user => user.tasks) 
   user: UserEntity;
 }
